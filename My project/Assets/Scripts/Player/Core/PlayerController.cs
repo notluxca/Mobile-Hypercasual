@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     private Camera mainCamera;
 
     private bool isAttacking = false;
-    private float attackDuration = 0.8f; // tempo da animação de ataque
+    private float attackDuration = 0.8f; 
 
     void Awake()
     {
@@ -42,20 +42,19 @@ public class PlayerController : MonoBehaviour
         moveAction.Disable();
     }
 
-    void Update()
+    void Update() // fix: make all movement frame independent and in other class  
     {
-        // Bloqueia tudo enquanto ataca
+        // Block all actions while playing attacks
         if (isAttacking)
             return;
 
-        // Verifica se o jogador atacou (ex: tecla espaço)
         if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             StartCoroutine(StartAttack());
             return;
         }
 
-        // Movimento e animação
+
         Vector2 input = moveAction.ReadValue<Vector2>();
         Vector3 move = new Vector3(input.x, 0, input.y);
 
