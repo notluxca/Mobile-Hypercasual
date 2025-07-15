@@ -13,7 +13,6 @@ public class ItemStackerInertia : MonoBehaviour
 
     [Header("Ragdolls na stack")]
     public List<RagdollController> ragdollStackList = new List<RagdollController>();
-
     private List<Transform> rootBones = new List<Transform>();
     private List<Vector3> velocity = new List<Vector3>();
     private List<Vector3> lastPositions = new List<Vector3>();
@@ -30,7 +29,7 @@ public class ItemStackerInertia : MonoBehaviour
             var ragdoll = ragdollStackList[i];
             if (ragdoll != null && ragdoll.rootBone != null)
             {
-                ragdoll.AttachToStack();
+                ragdoll.AttachToStack(); // not necessary because enemy go to ragdoll when killed now 
 
                 rootBones.Add(ragdoll.rootBone);
                 velocity.Add(Vector3.zero);

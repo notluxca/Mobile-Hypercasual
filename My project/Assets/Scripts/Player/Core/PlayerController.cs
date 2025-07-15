@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     private InputAction moveAction;
     private CharacterController characterController;
     private Camera mainCamera;
-    private float attackDuration = 0.8f;
+    private float attackDuration = 1.5f;
     private bool isAttacking = false;
 
     void Awake()
