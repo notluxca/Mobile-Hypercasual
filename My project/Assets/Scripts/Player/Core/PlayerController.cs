@@ -9,18 +9,18 @@ public class PlayerController : MonoBehaviour
     public InputActionAsset inputActions;
 
     [Header("Movement Settings")]
-    public float speed = 5f;
-    public float rotationSpeed = 10f;
+    [SerializeField] private float walkSpeed = 5f;
+    [SerializeField] private float runningSpeed = 8f;
+    [SerializeField] private float rotationSpeed = 10f;
+    private float currentSpeed = 0f;
 
-    [Header("Animation")]
-    public PlayerAnimatorController playerAnimatorController;
 
+    private PlayerAnimatorController playerAnimatorController;
     private InputAction moveAction;
     private CharacterController characterController;
     private Camera mainCamera;
-
+    private float attackDuration = 0.8f;
     private bool isAttacking = false;
-    private float attackDuration = 0.8f; 
 
     void Awake()
     {
@@ -62,15 +62,21 @@ public class PlayerController : MonoBehaviour
 
         if (magnitude > 0.1f)
         {
-            characterController.Move(move.normalized * speed * Time.deltaTime);
+            characterController.Move(move.normalized * currentSpeed * Time.deltaTime);
 
             Quaternion targetRotation = Quaternion.LookRotation(move);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
             if (magnitude < 0.8f)
+            {
+                currentSpeed = walkSpeed;
                 playerAnimatorController.Play(PlayerAnimations.Walk);
+            }
             else
+            {
+                currentSpeed = runningSpeed;
                 playerAnimatorController.Play(PlayerAnimations.Run);
+            }
         }
         else
         {

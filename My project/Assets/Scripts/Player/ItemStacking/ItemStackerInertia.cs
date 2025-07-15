@@ -3,11 +3,13 @@ using System.Collections.Generic;
 
 public class ItemStackerInertia : MonoBehaviour
 {
+    [Header("Stack Configurations")]
     public Transform player;
     public float verticalOffset = 0.5f;
     public float smoothTime = 0.2f;
     public float rotationMultiplier = 10f;
     public float rotationSmooth = 5f;
+    public float incrementalFollowDelay;
 
     [Header("Ragdolls na stack")]
     public List<RagdollController> ragdollStackList = new List<RagdollController>();
@@ -46,7 +48,7 @@ public class ItemStackerInertia : MonoBehaviour
             Transform item = rootBones[i];
             targetPos += Vector3.up * verticalOffset;
 
-            float adjustedSmoothTime = smoothTime + i * 0.05f;
+            float adjustedSmoothTime = smoothTime + i * incrementalFollowDelay;
 
             // Smooth posição
             Vector3 vel = velocity[i];
