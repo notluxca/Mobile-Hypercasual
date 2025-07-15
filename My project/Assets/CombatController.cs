@@ -7,10 +7,12 @@ public class CombatController : MonoBehaviour
     [Header("Combat Settings")]
     public float checkInterval = 1.0f;
     public float attackDistance = 3f;
+    public float turnSpeed = 5f; // Add this for smooth turning
     public LayerMask enemyLayer;
 
     private SphereCollider attackRange;
     private PlayerController playerController;
+    private Transform targetEnemy; // Store the current target
 
     private void Start()
     {
@@ -22,6 +24,20 @@ public class CombatController : MonoBehaviour
             Debug.LogWarning("CharacterController não encontrado!");
 
         StartCoroutine(CheckForEnemies());
+    }
+
+    private void Update()
+    {
+        if (targetEnemy != null)
+        {
+            Vector3 direction = (targetEnemy.position - transform.position).normalized;
+            direction.y = 0f;
+            if (direction.sqrMagnitude > 0.001f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * turnSpeed);
+            }
+        }
     }
 
     private IEnumerator CheckForEnemies()
@@ -47,13 +63,13 @@ public class CombatController : MonoBehaviour
 
             if (closestEnemy != null && Mathf.Sqrt(closestDistanceSqr) <= attackDistance)
             {
-                // Olha para o inimigo
-                Vector3 direction = (closestEnemy.position - transform.position).normalized;
-                direction.y = 0f; // Mantém o olhar no plano horizontal
-                transform.rotation = Quaternion.LookRotation(direction);
+                targetEnemy = closestEnemy; // Set the target for smooth turning
                 Debug.Log("Olhou para o inimigo: " + closestEnemy.name);
-                // Ataca
                 playerController.Attack();
+            }
+            else
+            {
+                targetEnemy = null; // No target to look at
             }
         }
     }

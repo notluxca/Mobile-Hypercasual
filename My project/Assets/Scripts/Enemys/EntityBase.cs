@@ -1,16 +1,22 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class EntityBase : MonoBehaviour, IDamageable
 {
-    private RagdollController ragdollController;
+    [Header("Entity Settings")]
     [SerializeField] private Rigidbody mainRigidbody;
+    [SerializeField] private float delayToStack;
+
+    private RagdollController ragdollController;
     private Collider entityCollider;
-    private Animator animator;
+
+
+    public static Action<RagdollController> EntityDied;
 
     void Awake()
     {
         ragdollController = GetComponent<RagdollController>();
-        animator = GetComponent<Animator>();
         entityCollider = GetComponent<Collider>();
     }
 
@@ -25,15 +31,14 @@ public class EntityBase : MonoBehaviour, IDamageable
         {
             Vector3 direction = (transform.position - hitPosition.position).normalized;
             mainRigidbody.AddForce(direction * knockbackForce, ForceMode.Impulse);
+            StartCoroutine(WarnDeath());
         }
-
-
     }
 
-    // Sobrecarga para ContextMenu
-    [ContextMenu("die")]
-    public void WarnDeath()
+    private IEnumerator WarnDeath()
     {
-        TakeDamage(transform, 0, 5f); // valor simbólico de knockback
+        yield return new WaitForSeconds(delayToStack);
+        EntityDied?.Invoke(ragdollController);
     }
+
 }

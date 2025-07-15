@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class ItemStackerInertia : MonoBehaviour
 {
@@ -18,6 +19,33 @@ public class ItemStackerInertia : MonoBehaviour
     private List<Vector3> lastPositions = new List<Vector3>();
 
     private Vector3 lastPlayerPosition;
+
+    void OnEnable()
+    {
+        EntityBase.EntityDied += AddToStack;
+    }
+
+    private void AddToStack(RagdollController controller)
+    {
+        if (controller == null || controller.rootBone == null)
+            return;
+
+        ragdollStackList.Add(controller);
+        rootBones.Add(controller.rootBone);
+        velocity.Add(Vector3.zero);
+
+        // Começa o ragdoll da posição atual (parado), mas finge que ele estava longe
+        // para o SmoothDamp funcionar direito no primeiro frame
+        Vector3 targetStackPosition = player.position + Vector3.up * verticalOffset * (rootBones.Count + 1);
+        lastPositions.Add(controller.rootBone.position - (targetStackPosition - controller.rootBone.position));
+
+        // Opcional: desativa física se quiser controle total
+        Rigidbody rb = controller.rootBone.GetComponent<Rigidbody>();
+        if (rb != null) rb.isKinematic = true;
+
+        Debug.Log($"Ragdoll {controller.name} added to stack.");
+    }
+
 
     void Start()
     {
