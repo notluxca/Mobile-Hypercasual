@@ -50,7 +50,7 @@ public class RagdollController : MonoBehaviour
         foreach (var rb in rigidbodies)
         {
             rb.useGravity = false;
-            rb.isKinematic = false;
+            rb.isKinematic = true;
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }

@@ -14,7 +14,8 @@ public class ItemStackerInertia : MonoBehaviour
 
     [Header("Ragdolls na stack")]
     public List<RagdollController> ragdollStackList = new List<RagdollController>();
-    private List<Transform> rootBones = new List<Transform>();
+    public List<Transform> rootBones = new List<Transform>();
+
     private List<Vector3> velocity = new List<Vector3>();
     private List<Vector3> lastPositions = new List<Vector3>();
 
@@ -39,7 +40,6 @@ public class ItemStackerInertia : MonoBehaviour
         Vector3 targetStackPosition = player.position + Vector3.up * verticalOffset * (rootBones.Count + 1);
         lastPositions.Add(controller.rootBone.position - (targetStackPosition - controller.rootBone.position));
 
-        // Opcional: desativa física se quiser controle total
         Rigidbody rb = controller.rootBone.GetComponent<Rigidbody>();
         if (rb != null) rb.isKinematic = true;
 
@@ -94,5 +94,23 @@ public class ItemStackerInertia : MonoBehaviour
         }
 
         lastPlayerPosition = player.position;
+    }
+
+
+    // Remove the last ragdoll from the stack
+    public RagdollController PopLastRagdoll()
+    {
+        if (ragdollStackList.Count == 0)
+            return null;
+
+        int index = ragdollStackList.Count - 1;
+        var ragdoll = ragdollStackList[index];
+
+        ragdollStackList.RemoveAt(index);
+        rootBones.RemoveAt(index);
+        velocity.RemoveAt(index);
+        lastPositions.RemoveAt(index);
+
+        return ragdoll;
     }
 }

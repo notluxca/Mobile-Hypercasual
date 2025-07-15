@@ -64,7 +64,6 @@ public class CombatController : MonoBehaviour
             if (closestEnemy != null && Mathf.Sqrt(closestDistanceSqr) <= attackDistance)
             {
                 targetEnemy = closestEnemy; // Set the target for smooth turning
-                Debug.Log("Olhou para o inimigo: " + closestEnemy.name);
                 playerController.Attack();
             }
             else
