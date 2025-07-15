@@ -47,12 +47,11 @@ public class PlayerController : MonoBehaviour
         // Block all actions while playing attacks
         if (isAttacking)
             return;
-
-        if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            StartCoroutine(StartAttack());
-            return;
-        }
+        // if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
+        // {
+        //     StartCoroutine(StartAttack());
+        //     return;
+        // }
 
 
         Vector2 input = moveAction.ReadValue<Vector2>();
@@ -82,6 +81,14 @@ public class PlayerController : MonoBehaviour
         {
             playerAnimatorController.Play(PlayerAnimations.Idle);
         }
+    }
+
+    public void Attack()
+    {
+        if (isAttacking)
+            return;
+
+        StartCoroutine(StartAttack());
     }
 
     private IEnumerator StartAttack()
