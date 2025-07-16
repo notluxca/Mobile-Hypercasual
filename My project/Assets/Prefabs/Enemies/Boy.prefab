@@ -914,7 +914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainRigidbody: {fileID: 3160834063844745736}
-  delayToStack: 3
+  delayToStack: 2
 --- !u!114 &8898425583617702023
 MonoBehaviour:
   m_ObjectHideFlags: 0

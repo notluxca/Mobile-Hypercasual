@@ -14,11 +14,13 @@ public class UpgradeCharacterArea : MonoBehaviour
     private bool isUpgrading = false;
 
     public Transform playerTransform;
+    private int currentProgress;
     public Transform targetPosition;
 
     void Awake()
     {
         playerTransform = GameObject.FindWithTag("Player").transform;
+        currentProgress = 0;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -45,30 +47,32 @@ public class UpgradeCharacterArea : MonoBehaviour
     private IEnumerator UpgradeRoutine(UpgradeController upgradeController)
     {
         isUpgrading = true;
-        int progress = 0;
 
-        UpdateText(progress);
+        UpdateText(currentProgress);
 
         while (true)
         {
             // tenta gastar 1 de dinheiro
             if (!CurrencyManager.Instance.TrySpendCash(1))
             {
+                Debug.Log("Não conseguiu gastar dinheiros");
                 break; // sem dinheiro
             }
+
+            // Debug.Log("Spawning money");
 
             MoneyPrompt _moneyPrompt = Instantiate(moneyPrompt, playerTransform.position, Quaternion.identity).GetComponent<MoneyPrompt>(); //fix memory management
             _moneyPrompt.Target = targetPosition;
             _moneyPrompt.AddCash = false;
+            currentProgress++;
 
-            progress++;
-            if (progress >= upgradesPerCycle)
+            if (currentProgress >= upgradesPerCycle)
             {
                 upgradeController.UpgradeCharacter(1);
-                progress = 0;
+                currentProgress = 0;
             }
 
-            UpdateText(progress);
+            UpdateText(currentProgress);
             yield return new WaitForSeconds(delayBetweenPayments);
         }
 
@@ -79,7 +83,7 @@ public class UpgradeCharacterArea : MonoBehaviour
     {
         if (progressText != null)
         {
-            progressText.text = $"{Mathf.Max(currentProgress, 1)} / {upgradesPerCycle}";
+            progressText.text = $"{currentProgress} / {upgradesPerCycle}";
         }
     }
 }

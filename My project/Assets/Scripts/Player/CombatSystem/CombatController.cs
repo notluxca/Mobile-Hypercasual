@@ -46,6 +46,12 @@ public class CombatController : MonoBehaviour
         {
             yield return new WaitForSeconds(checkInterval);
 
+            if (playerController == null || playerController.IsStackFull) // Player can add more than stack limit if punch was done before other ragdoll enter the stack
+            {
+                targetEnemy = null;
+                continue; // pula a checagem se player nulo ou stack cheia
+            }
+
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, attackRange.radius, enemyLayer);
             Transform closestEnemy = null;
             float closestDistanceSqr = Mathf.Infinity;
@@ -63,12 +69,12 @@ public class CombatController : MonoBehaviour
 
             if (closestEnemy != null && Mathf.Sqrt(closestDistanceSqr) <= attackDistance)
             {
-                targetEnemy = closestEnemy; // Set the target for smooth turning
+                targetEnemy = closestEnemy;
                 playerController.Attack();
             }
             else
             {
-                targetEnemy = null; // No target to look at
+                targetEnemy = null;
             }
         }
     }

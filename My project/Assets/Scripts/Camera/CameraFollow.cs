@@ -36,7 +36,7 @@ public class CameraFollow : MonoBehaviour
     private bool fadeOut = true;
     private bool snapping = false;
 
-    private void ShakeCamera()
+    private void ShakeCamera(RagdollController _)
     {
         transform.DOShakePosition(
             shakeDuration,

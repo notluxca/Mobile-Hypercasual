@@ -38,15 +38,14 @@ public class RagdollController : MonoBehaviour
             rb.linearVelocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }
-
-        Debug.Log("Ragdolled");
+        // Debug.Log("Ragdolled");
     }
 
     public void AttachToStack()
     {
         animator.Rebind();         // Reinicia os valores
         animator.Update(0);        // Garante que o rebind seja aplicado
-        animator.enabled = false;  // Agora sim desliga o Animator
+        animator.enabled = false;
         foreach (var rb in rigidbodies)
         {
             rb.useGravity = false;

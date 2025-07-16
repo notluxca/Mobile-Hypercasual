@@ -58,6 +58,8 @@ public class SellStackArea : MonoBehaviour
 
             yield return seq.WaitForCompletion();
 
+
+
             Destroy(ragdoll.gameObject); // fix: Object Pooling
             Instantiate(moneyPrompt, targetTransform.position, Quaternion.identity);
         }

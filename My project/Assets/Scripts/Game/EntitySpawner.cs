@@ -40,7 +40,8 @@ public class EntitySpawner : MonoBehaviour
 
                 if (spawnPosition != Vector3.zero)
                 {
-                    GameObject newEnemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity, parent);
+                    Quaternion randomYRotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
+                    GameObject newEnemy = Instantiate(enemyPrefab, spawnPosition, randomYRotation, parent);
                     // newEnemy.
                     activeEnemies.Add(newEnemy);
                 }

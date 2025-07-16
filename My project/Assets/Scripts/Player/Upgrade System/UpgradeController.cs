@@ -27,11 +27,7 @@ public class UpgradeController : MonoBehaviour
 
     public void UpgradeCharacter(int value)
     {
-        // stackLimit += stackUpgradeIncrease;
-        // playerController.StackLimit += stackUpgradeIncrease;
-
-        // Debug.Log($"Character upgraded! New stack limit: {playerController.StackLimit}");
-
+        playerController.maxStackLimit += stackUpgradeIncrease;
         ChangeColor();
     }
 

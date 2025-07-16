@@ -14,7 +14,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10f;
     private float currentSpeed = 0f;
 
-    public int currentStackLimit;
+    public int maxStackLimit = 3;
+    public bool IsStackFull => itemStacker != null && itemStacker.preStackList.Count >= maxStackLimit;
     ItemStackerInertia itemStacker;
 
 
@@ -29,7 +30,7 @@ public class PlayerController : MonoBehaviour
     {
         playerAnimatorController = GetComponent<PlayerAnimatorController>();
         characterController = GetComponent<CharacterController>();
-        // itemStacker.
+        itemStacker = GetComponent<ItemStackerInertia>();
         mainCamera = Camera.main;
 
         var actionMap = inputActions.FindActionMap("Player");
@@ -48,6 +49,7 @@ public class PlayerController : MonoBehaviour
 
     void Update() // fix: make all movement frame independent and in other class  
     {
+        // Debug.Log(itemStacker.preStackList.Count);
         // Block all actions while playing attacks
         if (isAttacking)
             return;
