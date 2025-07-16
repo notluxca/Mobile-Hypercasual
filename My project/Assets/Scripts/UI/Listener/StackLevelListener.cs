@@ -46,7 +46,7 @@ public class StackLevelListener : MonoBehaviour
         // Detecta mudança
         if (maxStack != lastMaxStack)
         {
-            Debug.Log($"MaxStack upgrade: {lastMaxStack} → {maxStack}");
+            // Debug.Log($"MaxStack upgrade: {lastMaxStack} → {maxStack}");
             lastMaxStack = maxStack;
         }
 
