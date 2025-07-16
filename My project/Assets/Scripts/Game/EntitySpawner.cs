@@ -53,7 +53,9 @@ public class EntitySpawner : MonoBehaviour
 
     private Vector3 GetRandomPointOnGround()
     {
-        for (int i = 0; i < 10; i++) // tenta encontrar um ponto válido
+        const int maxAttempts = 5;
+
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
         {
             Vector2 randomCircle = Random.insideUnitCircle * spawnRadius;
             Vector3 randomPos = new Vector3(
@@ -64,9 +66,15 @@ public class EntitySpawner : MonoBehaviour
 
             Debug.DrawRay(randomPos, Vector3.down * 100f, Color.yellow, 1f);
 
-            if (Physics.Raycast(randomPos, Vector3.down, out RaycastHit hit, 100f, groundLayer))
+            if (Physics.Raycast(randomPos, Vector3.down, out RaycastHit hit, 100f))
             {
-                return hit.point;
+                int hitLayer = hit.collider.gameObject.layer;
+                Debug.Log($"Tentativa {attempt + 1}: Acertou '{hit.collider.name}' na layer '{LayerMask.LayerToName(hitLayer)}'");
+
+                if (((1 << hitLayer) & groundLayer) != 0)
+                {
+                    return hit.point;
+                }
             }
         }
 
