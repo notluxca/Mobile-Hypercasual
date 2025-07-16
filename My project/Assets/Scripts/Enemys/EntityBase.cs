@@ -12,6 +12,7 @@ public class EntityBase : MonoBehaviour, IDamageable
     private Collider entityCollider;
 
 
+    public static Action EntityPunched;
     public static Action<RagdollController> EntityDied;
 
     void Awake()
@@ -31,6 +32,7 @@ public class EntityBase : MonoBehaviour, IDamageable
         {
             Vector3 direction = (transform.position - hitPosition.position).normalized;
             mainRigidbody.AddForce(direction * knockbackForce, ForceMode.Impulse);
+            EntityPunched?.Invoke();
             StartCoroutine(WarnDeath());
         }
     }

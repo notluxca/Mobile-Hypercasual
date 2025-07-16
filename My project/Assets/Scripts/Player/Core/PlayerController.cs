@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10f;
     private float currentSpeed = 0f;
 
+    public int currentStackLimit;
+    ItemStackerInertia itemStacker;
+
 
     private PlayerAnimatorController playerAnimatorController;
     private InputAction moveAction;
@@ -26,6 +29,7 @@ public class PlayerController : MonoBehaviour
     {
         playerAnimatorController = GetComponent<PlayerAnimatorController>();
         characterController = GetComponent<CharacterController>();
+        // itemStacker.
         mainCamera = Camera.main;
 
         var actionMap = inputActions.FindActionMap("Player");

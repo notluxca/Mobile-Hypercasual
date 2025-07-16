@@ -5,6 +5,7 @@ using DG.Tweening;
 public class SellStackArea : MonoBehaviour
 {
     public Transform targetTransform;
+    public GameObject moneyPrompt;
     public float delayBetweenSales = 0.3f;
     public float arcHeight = 2f;
 
@@ -57,8 +58,8 @@ public class SellStackArea : MonoBehaviour
 
             yield return seq.WaitForCompletion();
 
-            // Destroi ou recicla
-            Destroy(ragdoll.gameObject);
+            Destroy(ragdoll.gameObject); // fix: Object Pooling
+            Instantiate(moneyPrompt, targetTransform.position, Quaternion.identity);
         }
 
         isSelling = false;
