@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// Controll all player animations based on a ENUM to list avaible animations
 public class PlayerAnimatorController : MonoBehaviour
 {
     [Header("Animator Settings")]

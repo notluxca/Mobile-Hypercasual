@@ -4,4 +4,5 @@ public enum PlayerAnimations
     Walk,
     Run,
     Attack
+    // populate to add more animation options
 }
