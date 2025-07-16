@@ -55,7 +55,6 @@ public class UpgradeCharacterArea : MonoBehaviour
             // tenta gastar 1 de dinheiro
             if (!CurrencyManager.Instance.TrySpendCash(1))
             {
-                Debug.Log("Não conseguiu gastar dinheiros");
                 break; // sem dinheiro
             }
 

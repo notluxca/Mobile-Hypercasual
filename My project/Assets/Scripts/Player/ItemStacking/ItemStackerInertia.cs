@@ -16,6 +16,7 @@ public class ItemStackerInertia : MonoBehaviour
     public List<RagdollController> preStackList = new List<RagdollController>();
     public List<RagdollController> ragdollStackList = new List<RagdollController>();
     public List<Transform> rootBones = new List<Transform>();
+    public static Action<int> StackCountChanged;
 
     private List<Vector3> velocity = new List<Vector3>();
     private List<Vector3> lastPositions = new List<Vector3>();
@@ -40,8 +41,9 @@ public class ItemStackerInertia : MonoBehaviour
         if (ragdollStackList.Contains(controller) || preStackList.Contains(controller)) return;
 
         preStackList.Add(controller);
+        StackCountChanged?.Invoke(preStackList.Count);
 
-        Debug.Log($"Ragdoll {controller.name} prestacked.");
+        // Debug.Log($"Ragdoll {controller.name} prestacked.");
     }
 
     private void AddToStack(RagdollController controller)
@@ -59,7 +61,7 @@ public class ItemStackerInertia : MonoBehaviour
         Rigidbody rb = controller.rootBone.GetComponent<Rigidbody>();
         if (rb != null) rb.isKinematic = true;
 
-        Debug.Log($"Ragdoll {controller.name} added to stack.");
+        // Debug.Log($"Ragdoll {controller.name} added to stack.");
     }
 
     void Start()
@@ -123,6 +125,7 @@ public class ItemStackerInertia : MonoBehaviour
         // Se foi prestacado, remova da prestack
         if (preStackList.Contains(ragdoll))
             preStackList.Remove(ragdoll);
+        StackCountChanged?.Invoke(preStackList.Count);
 
         return ragdoll;
     }

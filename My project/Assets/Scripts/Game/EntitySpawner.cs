@@ -69,7 +69,7 @@ public class EntitySpawner : MonoBehaviour
             if (Physics.Raycast(randomPos, Vector3.down, out RaycastHit hit, 100f))
             {
                 int hitLayer = hit.collider.gameObject.layer;
-                Debug.Log($"Tentativa {attempt + 1}: Acertou '{hit.collider.name}' na layer '{LayerMask.LayerToName(hitLayer)}'");
+                // Debug.Log($"Tentativa {attempt + 1}: Acertou '{hit.collider.name}' na layer '{LayerMask.LayerToName(hitLayer)}'");
 
                 if (((1 << hitLayer) & groundLayer) != 0)
                 {

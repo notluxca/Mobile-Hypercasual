@@ -6,7 +6,7 @@ public class CurrencyManager : MonoBehaviour
     public static CurrencyManager Instance { get; private set; }
     public int CurrentCash { get; private set; }
 
-    private static Action<int> cashChanged;
+    public static Action<int> cashChanged;
 
     private void Awake()
     {

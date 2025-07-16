@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class UpgradeController : MonoBehaviour
@@ -7,14 +8,19 @@ public class UpgradeController : MonoBehaviour
     public int stackUpgradeIncrease = 2;
     public PlayerController playerController;
 
+    public int currentLevel;
+    public static Action<int> levelChanged;
+    public static Action<int> maxStackChanged;
+
     [Header("Visual Feedback")]
-    public Color[] upgradeColors; // Lista de cores para trocar
+    public Color[] upgradeColors;
     private int currentColorIndex = 0;
 
     private Renderer characterRenderer;
 
     void Start()
     {
+        currentLevel = 1; // initialize on level 1
         characterRenderer = GetComponent<Renderer>();
         if (characterRenderer == null)
         {
@@ -27,8 +33,11 @@ public class UpgradeController : MonoBehaviour
 
     public void UpgradeCharacter(int value)
     {
-        playerController.maxStackLimit += stackUpgradeIncrease;
         ChangeColor();
+        playerController.maxStackLimit += stackUpgradeIncrease;
+        currentLevel++;
+        levelChanged?.Invoke(currentLevel);
+        maxStackChanged?.Invoke(playerController.maxStackLimit);
     }
 
     public void ChangeColor()
