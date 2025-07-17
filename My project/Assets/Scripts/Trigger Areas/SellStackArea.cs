@@ -16,7 +16,7 @@ public class SellStackArea : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            var stacker = other.GetComponent<ItemStackerInertia>();
+            var stacker = other.GetComponent<BodyStacker>();
             if (stacker != null && !isSelling)
             {
                 sellRoutine = StartCoroutine(SellRoutine(stacker));
@@ -33,7 +33,7 @@ public class SellStackArea : MonoBehaviour
         }
     }
 
-    private IEnumerator SellRoutine(ItemStackerInertia stacker)
+    private IEnumerator SellRoutine(BodyStacker stacker)
     {
         isSelling = true;
 
@@ -58,9 +58,7 @@ public class SellStackArea : MonoBehaviour
 
             yield return seq.WaitForCompletion();
 
-
-
-            Destroy(ragdoll.gameObject); // fix: Object Pooling
+            Destroy(ragdoll.gameObject); // fix: implement Object Pooling if needed perfomance wise
             Instantiate(moneyPrompt, targetTransform.position, Quaternion.identity);
         }
 

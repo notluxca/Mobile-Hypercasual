@@ -5,13 +5,13 @@ using System.Collections.Generic;
 public class EntitySpawner : MonoBehaviour
 {
     [Header("Spawner Settings")]
-    public GameObject enemyPrefab;
-    public Transform player;
-    public Transform parent;
-    public float spawnRadius = 20f;
-    public float spawnInterval = 2f;
-    public int maxEnemies = 10;
-    public LayerMask groundLayer;
+    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private Transform EntitiesParent;
+    [SerializeField] private Transform player;
+    [SerializeField] private float spawnRadius = 20f;
+    [SerializeField] private float spawnInterval = 2f;
+    [SerializeField] private int maxEnemies = 10;
+    [SerializeField] private LayerMask groundLayer;
 
     private List<GameObject> activeEnemies = new List<GameObject>();
     private Coroutine spawnRoutine;
@@ -31,7 +31,7 @@ public class EntitySpawner : MonoBehaviour
     {
         while (true)
         {
-            // Limpa inimigos destruídos da lista
+            // Clean Destroyed enemies from
             activeEnemies.RemoveAll(enemy => enemy == null);
 
             if (activeEnemies.Count < maxEnemies)
@@ -41,12 +41,10 @@ public class EntitySpawner : MonoBehaviour
                 if (spawnPosition != Vector3.zero)
                 {
                     Quaternion randomYRotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
-                    GameObject newEnemy = Instantiate(enemyPrefab, spawnPosition, randomYRotation, parent);
-                    // newEnemy.
+                    GameObject newEnemy = Instantiate(enemyPrefab, spawnPosition, randomYRotation, EntitiesParent);
                     activeEnemies.Add(newEnemy);
                 }
             }
-
             yield return new WaitForSeconds(spawnInterval);
         }
     }

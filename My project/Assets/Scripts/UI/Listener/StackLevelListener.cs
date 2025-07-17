@@ -23,14 +23,14 @@ public class StackLevelListener : MonoBehaviour
     {
         UpgradeController.levelChanged += UpdateLevelText;
         UpgradeController.maxStackChanged += UpdateMaxStackValue;
-        ItemStackerInertia.StackCountChanged += UpdateCurrentStackValue;
+        BodyStacker.StackCountChanged += UpdateCurrentStackValue;
     }
 
     void OnDisable()
     {
         UpgradeController.levelChanged -= UpdateLevelText;
         UpgradeController.maxStackChanged -= UpdateMaxStackValue;
-        ItemStackerInertia.StackCountChanged -= UpdateCurrentStackValue;
+        BodyStacker.StackCountChanged -= UpdateCurrentStackValue;
     }
 
     private void UpdateLevelText(int level)

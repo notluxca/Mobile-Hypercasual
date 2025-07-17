@@ -2,10 +2,10 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
-public class ItemStackerInertia : MonoBehaviour
+public class BodyStacker : MonoBehaviour
 {
     [Header("Stack Configurations")]
-    public Transform player;
+    public Transform stackPosition;
     public float verticalOffset = 0.5f;
     public float smoothTime = 0.2f;
     public float rotationMultiplier = 10f;
@@ -13,15 +13,14 @@ public class ItemStackerInertia : MonoBehaviour
     public float incrementalFollowDelay;
 
     [Header("Ragdolls in stack")]
-    public List<RagdollController> preStackList = new List<RagdollController>();
-    public List<RagdollController> ragdollStackList = new List<RagdollController>();
-    public List<Transform> rootBones = new List<Transform>();
+    public List<RagdollController> preStackList = new List<RagdollController>();  // prestack is a Stack that count enemys from the moment they are punched - I use it for UI calculations
+    private List<RagdollController> ragdollStackList = new List<RagdollController>(); // this stack only updates once the entitie ragdoll starts flying towards the stack
+    private List<Transform> rootBones = new List<Transform>();
     public static Action<int> StackCountChanged;
 
     private List<Vector3> velocity = new List<Vector3>();
     private List<Vector3> lastPositions = new List<Vector3>();
-
-    private Vector3 lastPlayerPosition;
+    Vector3 _targetStackPos;
 
     void OnEnable()
     {
@@ -55,7 +54,7 @@ public class ItemStackerInertia : MonoBehaviour
         rootBones.Add(controller.rootBone);
         velocity.Add(Vector3.zero);
 
-        Vector3 targetStackPosition = player.position + Vector3.up * verticalOffset * (rootBones.Count + 1);
+        Vector3 targetStackPosition = stackPosition.position + Vector3.up * verticalOffset * (rootBones.Count + 1);
         lastPositions.Add(controller.rootBone.position - (targetStackPosition - controller.rootBone.position));
 
         Rigidbody rb = controller.rootBone.GetComponent<Rigidbody>();
@@ -64,36 +63,19 @@ public class ItemStackerInertia : MonoBehaviour
         // Debug.Log($"Ragdoll {controller.name} added to stack.");
     }
 
-    void Start()
-    {
-        lastPlayerPosition = player.position;
-
-        // Inicializa os ragdolls definidos via inspector
-        for (int i = 0; i < ragdollStackList.Count; i++)
-        {
-            var ragdoll = ragdollStackList[i];
-            if (ragdoll != null && ragdoll.rootBone != null)
-            {
-                rootBones.Add(ragdoll.rootBone);
-                velocity.Add(Vector3.zero);
-                lastPositions.Add(ragdoll.rootBone.position);
-            }
-        }
-    }
-
     void Update()
     {
-        Vector3 targetPos = player.position;
+        _targetStackPos = stackPosition.position;
 
         for (int i = 0; i < rootBones.Count; i++)
         {
             Transform item = rootBones[i];
-            targetPos += Vector3.up * verticalOffset;
+            _targetStackPos += Vector3.up * verticalOffset;
 
             float adjustedSmoothTime = smoothTime + i * incrementalFollowDelay;
 
             Vector3 vel = velocity[i];
-            item.position = Vector3.SmoothDamp(item.position, targetPos, ref vel, adjustedSmoothTime);
+            item.position = Vector3.SmoothDamp(item.position, _targetStackPos, ref vel, adjustedSmoothTime);
             velocity[i] = vel;
 
             Vector3 itemDelta = item.position - lastPositions[i];
@@ -105,8 +87,6 @@ public class ItemStackerInertia : MonoBehaviour
 
             lastPositions[i] = item.position;
         }
-
-        lastPlayerPosition = player.position;
     }
 
     // Remove the last ragdoll from the stack
@@ -122,9 +102,8 @@ public class ItemStackerInertia : MonoBehaviour
         velocity.RemoveAt(index);
         lastPositions.RemoveAt(index);
 
-        // Se foi prestacado, remova da prestack
-        if (preStackList.Contains(ragdoll))
-            preStackList.Remove(ragdoll);
+        // Remove from prestack
+        preStackList.Remove(ragdoll);
         StackCountChanged?.Invoke(preStackList.Count);
 
         return ragdoll;

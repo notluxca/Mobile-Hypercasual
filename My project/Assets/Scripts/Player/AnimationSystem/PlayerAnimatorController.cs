@@ -25,7 +25,7 @@ public class PlayerAnimatorController : MonoBehaviour
 
     public void Play(PlayerAnimations newState, float lockDuration = 0f)
     {
-        if (currentState == newState)
+        if (currentState == newState) // prevent repeated animation calls
             return;
 
         string targetAnim = animationNames[(int)newState];

@@ -67,7 +67,7 @@ public class UpgradeCharacterArea : MonoBehaviour
 
             if (currentProgress >= upgradesPerCycle)
             {
-                upgradeController.UpgradeCharacter(1);
+                upgradeController.UpgradeCharacter();
                 currentProgress = 0;
             }
 

@@ -3,9 +3,18 @@ using DG.Tweening; // Make sure DOTween is imported
 
 public class CameraFollow : MonoBehaviour
 {
+    [Header("Main Camera Settings")]
     [SerializeField] private Transform target;
     [SerializeField] private Vector3 offset = new Vector3(0f, 5f, -10f);
     [SerializeField] private float smoothSpeed = 5f;
+
+    [Header("Camera Shake Settings")]
+    [SerializeField] private float shakeDuration = 0.3f;
+    [SerializeField] private float shakeStrength = 0.5f;
+    private int shakeVibrato = 10;
+    private float shakeRandomness = 90f;
+    private bool fadeOut = true;
+    private bool snapping = false;
 
     private void OnEnable()
     {
@@ -27,14 +36,6 @@ public class CameraFollow : MonoBehaviour
 
         transform.LookAt(target);
     }
-
-    [Header("Camera Shake Settings")]
-    [SerializeField] private float shakeDuration = 0.3f;
-    [SerializeField] private float shakeStrength = 0.5f;
-    private int shakeVibrato = 10;
-    private float shakeRandomness = 90f;
-    private bool fadeOut = true;
-    private bool snapping = false;
 
     private void ShakeCamera(RagdollController _)
     {

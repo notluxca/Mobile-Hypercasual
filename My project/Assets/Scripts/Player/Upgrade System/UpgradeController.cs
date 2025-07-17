@@ -4,34 +4,30 @@ using UnityEngine;
 public class UpgradeController : MonoBehaviour
 {
     [Header("Upgrade Settings")]
-    public int stackLimit = 15;
     public int stackUpgradeIncrease = 2;
-    public PlayerController playerController;
+    public Color[] upgradeColors;
 
-    public int currentLevel;
+    private PlayerController playerController;
+    private int currentLevel;
     public static Action<int> levelChanged;
     public static Action<int> maxStackChanged;
-
-    [Header("Visual Feedback")]
-    public Color[] upgradeColors;
     private int currentColorIndex = 0;
-
     private Renderer characterRenderer;
+
+    void Awake()
+    {
+        playerController = GetComponent<PlayerController>();
+        characterRenderer = GetComponentInChildren<Renderer>();
+    }
 
     void Start()
     {
         currentLevel = 1; // initialize on level 1
-        characterRenderer = GetComponent<Renderer>();
-        if (characterRenderer == null)
-        {
-            characterRenderer = GetComponentInChildren<Renderer>();
-        }
-
-        if (upgradeColors.Length > 0)
+        if (upgradeColors.Length > 0) // initialize on first level color
             characterRenderer.material.color = upgradeColors[currentColorIndex];
     }
 
-    public void UpgradeCharacter(int value)
+    public void UpgradeCharacter()
     {
         ChangeColor();
         playerController.maxStackLimit += stackUpgradeIncrease;

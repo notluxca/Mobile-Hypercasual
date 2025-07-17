@@ -7,22 +7,22 @@ public class CombatController : MonoBehaviour
     [Header("Combat Settings")]
     public float checkInterval = 1.0f;
     public float attackDistance = 3f;
-    public float turnSpeed = 5f; // Add this for smooth turning
+    public float turnSpeed = 5f; //
     public LayerMask enemyLayer;
 
     private SphereCollider attackRange;
     private PlayerController playerController;
-    private Transform targetEnemy; // Store the current target
+    private Transform targetEnemy;
+
+    void Awake()
+    {
+        attackRange = GetComponent<SphereCollider>();
+        playerController = GetComponent<PlayerController>();
+    }
 
     private void Start()
     {
-        attackRange = GetComponent<SphereCollider>();
         attackRange.isTrigger = true;
-
-        playerController = GetComponent<PlayerController>();
-        if (playerController == null)
-            Debug.LogWarning("CharacterController não encontrado!");
-
         StartCoroutine(CheckForEnemies());
     }
 
@@ -46,7 +46,7 @@ public class CombatController : MonoBehaviour
         {
             yield return new WaitForSeconds(checkInterval);
 
-            if (playerController == null || playerController.IsStackFull) // Player can add more than stack limit if punch was done before other ragdoll enter the stack
+            if (playerController == null || playerController.IsStackFull)
             {
                 targetEnemy = null;
                 continue; // pula a checagem se player nulo ou stack cheia

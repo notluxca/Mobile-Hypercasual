@@ -29,16 +29,14 @@ public class CurrencyManager : MonoBehaviour
         // PlayerPrefs.SetInt("Cash", CurrentCash);
     }
 
-    public bool TrySpendCash(int amount)
+    public bool TrySpendCash(int amount) // if this function returns true when called, money will be spent
     {
         if (CurrentCash >= amount)
         {
             CurrentCash -= amount;
-            // PlayerPrefs.SetInt("Cash", CurrentCash);
             cashChanged?.Invoke(CurrentCash);
             return true;
         }
-
         return false;
     }
 

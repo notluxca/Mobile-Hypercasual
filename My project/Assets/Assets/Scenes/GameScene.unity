@@ -2390,10 +2390,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 4197872503394855609, guid: 8ad339d8747b80a4f862d29d85172d91, type: 3}
+  EntitiesParent: {fileID: 0}
   player: {fileID: 6629374649491845538}
-  parent: {fileID: 1806370662}
   spawnRadius: 15
-  spawnInterval: 0.5
+  spawnInterval: 1
   maxEnemies: 20
   groundLayer:
     serializedVersion: 2
@@ -3285,6 +3285,11 @@ MonoBehaviour:
   progressText: {fileID: 1563799137}
   playerTransform: {fileID: 0}
   targetPosition: {fileID: 379386482}
+--- !u!4 &1400290584 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 200850362445294958, guid: 81ec063b3eb1c02458bee6f06e8d0aa1, type: 3}
+  m_PrefabInstance: {fileID: 4690378608407772722}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1417148345
 GameObject:
   m_ObjectHideFlags: 0
@@ -5242,6 +5247,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8184900168242254143, guid: 81ec063b3eb1c02458bee6f06e8d0aa1, type: 3}
+      propertyPath: stackPosition
+      value: 
+      objectReference: {fileID: 1400290584}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

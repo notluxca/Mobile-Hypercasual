@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         Application.targetFrameRate = targetFrameRate;
-        QualitySettings.vSyncCount = 0; // Desativa VSync para o frame rate funcionar corretamente
+        QualitySettings.vSyncCount = 0;
         Debug.Log("FPS locked to " + targetFrameRate);
     }
 }

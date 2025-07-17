@@ -25,7 +25,7 @@ public class RagdollController : MonoBehaviour
         }
     }
 
-    [ContextMenu("Go Ragdoll")]
+    [ContextMenu("Go Ragdoll")] // editor testing
     public void GoRagdoll()
     {
         if (animator != null)

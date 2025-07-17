@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Damager : MonoBehaviour
 {
-    // quando um trigger de seu Damager é detectado ele aplica dano no hitObject se ele for IDamageable
     void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<IDamageable>(out IDamageable damageable))

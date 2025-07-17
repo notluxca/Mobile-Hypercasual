@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
 
     public int maxStackLimit = 3;
     public bool IsStackFull => itemStacker != null && itemStacker.preStackList.Count >= maxStackLimit;
-    ItemStackerInertia itemStacker;
+    BodyStacker itemStacker;
 
 
     private PlayerAnimatorController playerAnimatorController;
@@ -26,11 +26,16 @@ public class PlayerController : MonoBehaviour
     private float attackDuration = 1.5f;
     private bool isAttacking = false;
 
+    // movement variables
+    Vector2 input;
+    Vector3 move;
+    float magnitude;
+
     void Awake()
     {
         playerAnimatorController = GetComponent<PlayerAnimatorController>();
         characterController = GetComponent<CharacterController>();
-        itemStacker = GetComponent<ItemStackerInertia>();
+        itemStacker = GetComponent<BodyStacker>();
         mainCamera = Camera.main;
 
         var actionMap = inputActions.FindActionMap("Player");
@@ -47,23 +52,16 @@ public class PlayerController : MonoBehaviour
         moveAction.Disable();
     }
 
-    void Update() // fix: make all movement frame independent and in other class  
+    void Update()
     {
-        // Debug.Log(itemStacker.preStackList.Count);
         // Block all actions while playing attacks
         if (isAttacking)
             return;
-        // if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
-        // {
-        //     StartCoroutine(StartAttack());
-        //     return;
-        // }
 
+        input = moveAction.ReadValue<Vector2>();
+        move = new Vector3(input.x, 0, input.y);
+        magnitude = move.magnitude;
 
-        Vector2 input = moveAction.ReadValue<Vector2>();
-        Vector3 move = new Vector3(input.x, 0, input.y);
-
-        float magnitude = move.magnitude;
 
         if (magnitude > 0.1f)
         {
@@ -100,11 +98,8 @@ public class PlayerController : MonoBehaviour
     private IEnumerator StartAttack()
     {
         isAttacking = true;
-
         playerAnimatorController.Play(PlayerAnimations.Attack);
-
         yield return new WaitForSeconds(attackDuration);
-
         isAttacking = false;
     }
 }
