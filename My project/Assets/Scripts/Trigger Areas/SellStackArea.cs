@@ -5,7 +5,7 @@ using DG.Tweening;
 public class SellStackArea : MonoBehaviour
 {
     public Transform targetTransform;
-    public GameObject moneyPrompt;
+    public ObjectPool MoneyPoolProvider;
     public float delayBetweenSales = 0.3f;
     public float arcHeight = 2f;
 
@@ -58,8 +58,14 @@ public class SellStackArea : MonoBehaviour
 
             yield return seq.WaitForCompletion();
 
-            Destroy(ragdoll.gameObject); // fix: implement Object Pooling if needed perfomance wise
-            Instantiate(moneyPrompt, targetTransform.position, Quaternion.identity);
+            Destroy(ragdoll.gameObject);
+            GameObject moneyPrompt = MoneyPoolProvider.GetObject();
+            moneyPrompt.transform.position = targetTransform.position;
+
+            MoneyPrompt prompt = moneyPrompt.GetComponent<MoneyPrompt>();
+
+            prompt.AddCash = true;
+            prompt?.FlyFrom(targetTransform.position); // start from this positionity);
         }
 
         isSelling = false;

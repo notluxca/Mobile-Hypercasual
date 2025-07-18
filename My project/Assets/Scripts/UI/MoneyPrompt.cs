@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MoneyPrompt : MonoBehaviour
+public class MoneyPrompt : PoolableObject
 {
     [Header("Money Prompt Settings")]
     public bool AddCash = true;
@@ -13,8 +13,27 @@ public class MoneyPrompt : MonoBehaviour
     private float elapsedTime;
 
     private bool isFlying = false;
+    private TrailRenderer trailRenderer;
 
     void OnEnable()
+    {
+        isFlying = false;
+        elapsedTime = 0f;
+
+        if (trailRenderer == null)
+            trailRenderer = GetComponent<TrailRenderer>();
+
+        if (trailRenderer != null)
+            trailRenderer.Clear();
+    }
+
+    void OnDisable()
+    {
+        isFlying = false;
+        Target = null;
+    }
+
+    public void FlyFrom(Vector3 from)
     {
         if (Target == null)
         {
@@ -22,39 +41,38 @@ public class MoneyPrompt : MonoBehaviour
             if (Target == null)
             {
                 Debug.LogWarning("FlyToPlayer: No player found!");
-                enabled = false;
+                ReturnToPool();
                 return;
             }
         }
 
-        startPos = transform.position;
+        transform.position = from;
+        startPos = from;
         elapsedTime = 0f;
         isFlying = true;
     }
 
     void Update()
     {
-        if (!isFlying) return;
+        if (!isFlying || Target == null) return;
 
         elapsedTime += Time.deltaTime;
         float t = Mathf.Clamp01(elapsedTime / flyTime);
 
         Vector3 currentTarget = Target.position;
 
-        // Interpola horizontalmente
         Vector3 flatPos = Vector3.Lerp(startPos, currentTarget, t);
-
-        // Adiciona arco vertical
         float heightOffset = arcHeight * Mathf.Sin(t * Mathf.PI);
         flatPos.y += heightOffset;
 
         transform.position = flatPos;
 
-        // Chegou perto o suficiente?
         if (Vector3.Distance(transform.position, currentTarget) <= destroyDistance)
         {
-            if (AddCash) CurrencyManager.Instance.AddCash(1);
-            Destroy(gameObject);
+            if (AddCash)
+                CurrencyManager.Instance.AddCash(1);
+
+            ReturnToPool();
         }
     }
 }

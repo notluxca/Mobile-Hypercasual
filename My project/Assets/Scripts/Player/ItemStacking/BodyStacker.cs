@@ -25,16 +25,16 @@ public class BodyStacker : MonoBehaviour
     void OnEnable()
     {
         EntityBase.EntityDied += AddToStack;
-        EntityBase.EntityPunched += PreStack;
+        EntityBase.EntityPunched += AddToPreStack;
     }
 
     void OnDisable()
     {
         EntityBase.EntityDied -= AddToStack;
-        EntityBase.EntityPunched -= PreStack;
+        EntityBase.EntityPunched -= AddToPreStack;
     }
 
-    private void PreStack(RagdollController controller)
+    private void AddToPreStack(RagdollController controller)
     {
         if (controller == null || controller.rootBone == null) return;
         if (ragdollStackList.Contains(controller) || preStackList.Contains(controller)) return;
@@ -96,7 +96,7 @@ public class BodyStacker : MonoBehaviour
 
         int index = ragdollStackList.Count - 1;
 
-        var ragdoll = ragdollStackList[index];
+        RagdollController ragdoll = ragdollStackList[index];
         ragdollStackList.RemoveAt(index);
         rootBones.RemoveAt(index);
         velocity.RemoveAt(index);
